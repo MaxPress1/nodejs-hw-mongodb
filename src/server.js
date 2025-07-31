@@ -3,7 +3,7 @@ import pino from "pino-http";
 import cors from "cors";
 
 import { getEnvVar } from "./utils/getEnvVar.js";
-import contactsService from "./services/contacts.js";
+import { getAllContacts, getContactById } from "./services/contacts.js";
 
 const PORT = getEnvVar("PORT", 3000);
 
@@ -21,7 +21,7 @@ const setupServer = () => {
   );
 
   app.get('/contacts', async (req, res) => {
-    const contacts = await contactsService.getAllContacts();
+    const contacts = await getAllContacts();
     res.json({
       status: 200,
       message: 'Successfully found contacts!',
@@ -31,7 +31,7 @@ const setupServer = () => {
 
   app.get('/contacts/:contactId', async (req, res) => {
     const { contactId } = req.params;
-    const contact = await contactsService.getContactById(contactId);
+    const contact = await getContactById(contactId);
     if (!contact) {
       res.status(404).json({
         status: 404,

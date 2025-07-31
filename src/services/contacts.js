@@ -10,7 +10,4 @@ const getContactById = async (contactId) => {
   return contact;
 };
 
-export default {
-  getAllContacts,
-  getContactById,
-};
+export { getAllContacts, getContactById };
