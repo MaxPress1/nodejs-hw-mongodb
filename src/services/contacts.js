@@ -61,4 +61,5 @@ const deleteContact = async (contactId) => {
   return contact;
 };
 
+
   export { getAllContacts, getContactById, createContact, updateContact, deleteContact };
