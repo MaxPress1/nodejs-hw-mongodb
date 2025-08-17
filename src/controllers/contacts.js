@@ -16,6 +16,7 @@ const getAllContactsController = async (req, res) => {
      isFavourite,
      contactType,
    });
+
     res.json({
       status: 200,
       message: 'Successfully found contacts!',

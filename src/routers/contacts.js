@@ -9,6 +9,7 @@ const router = Router();
 
 router.get('/', ctrlWrapper(getAllContactsController));
 
+
 router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 
 router.post('/', validateBody(createContactSchema), ctrlWrapper(createContactController));
