@@ -9,7 +9,7 @@ export const createContactSchema = Joi.object({
   email: Joi.string().min(3).max(20).email().messages({
     "string.email": "Invalid email address",
   }),
-  phone: Joi.string().min(3).max(20).required().messages({
+  phoneNumber: Joi.string().min(3).max(20).required().messages({
     "string.min": "Phone must be at least 3 characters long",
     "string.max": "Phone must be less than 20 characters long",
     "any.required": "Phone is required",
@@ -29,7 +29,7 @@ export const updateContactSchema = Joi.object({
   email: Joi.string().min(3).max(20).email().messages({
     "string.email": "Invalid email address",
   }),
-  phone: Joi.string().min(3).max(20).messages({
+  phoneNumber: Joi.string().min(3).max(20).messages({
     "string.min": "Phone must be at least 3 characters long",
     "string.max": "Phone must be less than 20 characters long",
   }),
