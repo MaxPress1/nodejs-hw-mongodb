@@ -25,6 +25,11 @@ import { Schema, model } from 'mongoose';
         enum: ['work', 'home', 'personal'],
         default: 'personal',
       },
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
     },
     {
       timeseries: true,
