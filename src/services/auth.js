@@ -80,6 +80,7 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     throw createHttpError(401, 'Session token expired');
   }
   
+
   const newSessionData = createSession();
 
   await Session.deleteOne({ _id: sessionId, refreshToken });
@@ -167,4 +168,5 @@ export const resetPassword = async (payload) => {
     { _id: user._id },
     { password: encryptedPassword },
   );
+
 };

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { registerController, loginController, refreshUserSessionController, logoutController, requestResetEmailController, resetPasswordController } from '../controllers/auth.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { registerSchema, loginSchema, requestResetEmailSchema, resetPasswordSchema } from '../validation/auth.js';

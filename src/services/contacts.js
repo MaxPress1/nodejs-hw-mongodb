@@ -58,6 +58,7 @@ const updateContact = async (contactId, updateData, userId, options = {}) => {
   return contact;
 };
 
+
 const upsertContact = async (contactId, contactData) => {
   const { isNew, contact } = await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId: contactData.userId },
@@ -71,6 +72,7 @@ const deleteContact = async (contactId, userId) => {
   const contact = await ContactsCollection.findOneAndDelete({ _id: contactId, userId });
   return contact;
 };
+
 
 const uploadContactsPhoto = async (contactId, file, userId) => {
   const contact = await getContactById(contactId, userId);
@@ -86,3 +88,4 @@ const uploadContactsPhoto = async (contactId, file, userId) => {
 };
 
 export { getAllContacts, getContactById, createContact, updateContact, deleteContact, upsertContact, uploadContactsPhoto };
+

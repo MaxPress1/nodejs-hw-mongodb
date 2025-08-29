@@ -41,19 +41,10 @@ const getContactByIdController = async (req, res) => {
 
 const createContactController = async (req, res) => {
     const contactData = { ...req.body, userId: req.user._id };
-
+  
     if (req.file) {
-      console.log('File detected, uploading to Cloudinary...');
-      try {
-        contactData.photo = await saveFileToCloudinary(req.file);
-        console.log('Photo uploaded successfully:', contactData.photo);
-      } catch (error) {
-        console.error('Error uploading photo:', error);
-        throw error;
-      }
-    } else {
-      console.log('No file detected');
-    }
+    contactData.photo = await saveFileToCloudinary(req.file);
+  }
 
     const contact = await createContact(contactData);
 

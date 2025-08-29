@@ -25,6 +25,7 @@ export const createContactSchema = Joi.object({
 		      return helper.message('User id should be a valid mongo id');
 		    }
 		    return true;
+
   }),
   photo: Joi.string().optional(), 
 });
