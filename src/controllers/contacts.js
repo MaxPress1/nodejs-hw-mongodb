@@ -1,8 +1,9 @@
 import createHttpError from 'http-errors';
-import { getAllContacts, getContactById, createContact, updateContact, deleteContact } from '../services/contacts.js';
+import { getAllContacts, getContactById, createContact, updateContact, deleteContact, upsertContact, uploadContactsPhoto } from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 const getAllContactsController = async (req, res) => {
     const { page, perPage } = parsePaginationParams(req.query);
@@ -40,6 +41,11 @@ const getContactByIdController = async (req, res) => {
 
 const createContactController = async (req, res) => {
     const contactData = { ...req.body, userId: req.user._id };
+  
+    if (req.file) {
+    contactData.photo = await saveFileToCloudinary(req.file);
+  }
+
     const contact = await createContact(contactData);
 
     res.status(201).json({
@@ -51,8 +57,9 @@ const createContactController = async (req, res) => {
 
 const updateContactController = async (req, res) => {
     const { contactId } = req.params;
+    const updateData = { ...req.body };
 
-    const contact = await updateContact(contactId, req.body, req.user._id);
+    const contact = await updateContact(contactId, updateData, req.user._id);
     if (!contact) {
       throw createHttpError(404, 'Contact not found');
     }
@@ -74,4 +81,39 @@ const deleteContactController = async (req, res) => {
     res.status(204).send();
 };
 
-export { getAllContactsController, getContactByIdController, createContactController, updateContactController, deleteContactController };
+const upsertContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const contactData = { ...req.body, userId: req.user._id };
+
+  if (req.file) {
+    contactData.photo = await saveFileToCloudinary(req.file);
+  }
+
+  const { isNew, contact } = await upsertContact(contactId, contactData);
+
+  const status = isNew ? 201 : 200;
+
+  res.status(status).json({
+    status,
+    message: `Successfully upserted a contact!`,
+    data: contact,
+  });
+};
+
+const uploadContactsPhotoController = async (req, res) => {
+  const { contactId } = req.params;
+  
+  if (!req.file) {
+    throw createHttpError(400, 'Photo file is required');
+  }
+
+  const contact = await uploadContactsPhoto(contactId, req.file, req.user._id);
+  
+  res.json({
+    status: 200,
+    message: 'Successfully uploaded a photo for a contact!',
+    data: contact,
+  });
+};
+
+export { getAllContactsController, getContactByIdController, createContactController, updateContactController, deleteContactController, upsertContactController, uploadContactsPhotoController };

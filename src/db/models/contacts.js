@@ -30,9 +30,13 @@ import { Schema, model } from 'mongoose';
         ref: 'User',
         required: true,
       },
+      photo: {
+        type: String,
+        required: false,
+      },
     },
     {
-      timeseries: true,
+      timestamps: true,
       versionKey: false,
     },
   );
