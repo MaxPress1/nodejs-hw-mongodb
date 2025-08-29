@@ -25,7 +25,8 @@ export const createContactSchema = Joi.object({
 		      return helper.message('User id should be a valid mongo id');
 		    }
 		    return true;
-		 }),
+  }),
+  photo: Joi.string().optional(), 
 });
 
 export const updateContactSchema = Joi.object({
@@ -43,4 +44,5 @@ export const updateContactSchema = Joi.object({
   }),
   isFavourite: Joi.boolean(),
   contactType: Joi.string().valid("personal", "work", "home"),
-});
+  photo: Joi.string().optional(), 
+  });

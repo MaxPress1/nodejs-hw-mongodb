@@ -1,6 +1,8 @@
 import ContactsCollection from '../db/models/contacts.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { SORT_ORDER } from '../constants/index.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import createHttpError from 'http-errors';
 
 const getAllContacts = async ({
   page,
@@ -56,9 +58,31 @@ const updateContact = async (contactId, updateData, userId, options = {}) => {
   return contact;
 };
 
+const upsertContact = async (contactId, contactData) => {
+  const { isNew, contact } = await ContactsCollection.findOneAndUpdate(
+    { _id: contactId, userId: contactData.userId },
+    { ...contactData, userId: contactData.userId },
+    { new: true, upsert: true },
+  );
+  return { isNew, contact };
+};
+
 const deleteContact = async (contactId, userId) => {
   const contact = await ContactsCollection.findOneAndDelete({ _id: contactId, userId });
   return contact;
 };
 
-export { getAllContacts, getContactById, createContact, updateContact, deleteContact };
+const uploadContactsPhoto = async (contactId, file, userId) => {
+  const contact = await getContactById(contactId, userId);
+  if (!contact) {
+    throw createHttpError(404, 'Contact not found!');
+  }
+
+  const photoUrl = await saveFileToCloudinary(file);
+  contact.photo = photoUrl;
+  await contact.save();
+
+  return contact;
+};
+
+export { getAllContacts, getContactById, createContact, updateContact, deleteContact, upsertContact, uploadContactsPhoto };
