@@ -1,0 +1,56 @@
+tags:
+  - Contacts
+summary: Create a new contact
+operationId: createContact
+description: Create a new contact for the authenticated user. Supports optional photo upload via multipart/form-data.
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            minLength: 3
+            maxLength: 20
+          email:
+            type: string
+            format: email
+            minLength: 3
+            maxLength: 20
+          phoneNumber:
+            type: string
+            minLength: 3
+            maxLength: 20
+          isFavourite:
+            type: boolean
+            default: false
+          contactType:
+            type: string
+            enum: [personal, work, home]
+          photo:
+            type: string
+            format: binary
+        required: [name, phoneNumber, contactType]
+responses:
+  '201':
+    description: Contact created
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully created a contact!
+            data:
+              $ref: ../../schemas/Contact.yaml
+  '400':
+    description: Validation error

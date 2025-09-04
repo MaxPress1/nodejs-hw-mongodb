@@ -1,0 +1,87 @@
+tags:
+  - Contacts
+summary: List contacts
+operationId: getContacts
+description: Retrieve a list of contacts for the authenticated user with optional filtering and pagination.
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: page
+    schema:
+      type: integer
+      minimum: 1
+      default: 1
+    description: Page number for pagination
+  - in: query
+    name: perPage
+    schema:
+      type: integer
+      minimum: 1
+      default: 10
+    description: Number of items per page
+  - in: query
+    name: sortBy
+    schema:
+      type: string
+      default: _id
+    description: Field to sort by
+  - in: query
+    name: sortOrder
+    schema:
+      type: string
+      enum: [asc, desc, ASC, DESC, 1, -1]
+      default: asc
+    description: Sort order
+  - in: query
+    name: isFavourite
+    schema:
+      type: boolean
+    description: Filter by favourite contacts
+  - in: query
+    name: contactType
+    schema:
+      type: string
+      enum: [personal, work, home]
+    description: Filter by contact type
+responses:
+  '200':
+    description: List of contacts with pagination data
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found contacts!
+            data:
+              type: object
+              required: [data, page, perPage, totalItems, totalPages, hasNextPage, hasPrevPage]
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: ../../schemas/Contact.yaml
+                page:
+                  type: integer
+                  example: 1
+                perPage:
+                  type: integer
+                  example: 10
+                totalItems:
+                  type: integer
+                  example: 42
+                totalPages:
+                  type: integer
+                  example: 5
+                hasNextPage:
+                  type: boolean
+                  example: true
+                hasPrevPage:
+                  type: boolean
+                  example: false

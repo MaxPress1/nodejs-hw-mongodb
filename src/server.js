@@ -9,6 +9,7 @@ import authRouter from "./routers/auth.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { authenticate } from "./middlewares/authenticate.js";
+import { setupSwagger } from "./middlewares/setupSwagger.js";
 
 const PORT = getEnvVar("PORT", 3000);
 
@@ -25,6 +26,7 @@ const setupServer = () => {
       },
     }),
   );
+  app.use('/api-docs', setupSwagger());
   app.use('/auth', authRouter);
   app.use('/contacts', authenticate, contactsRouter);
 
