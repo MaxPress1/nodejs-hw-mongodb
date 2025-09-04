@@ -12,7 +12,7 @@ tags:
     description: Endpoints for managing contacts
 servers:
   - url: http://localhost:3000
-  - url: https://example.com
+  - url: https://nodejs-hw-mongodb-3-m0t4.onrender.com
 paths:
   /contacts:
     get:
